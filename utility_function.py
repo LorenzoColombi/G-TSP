@@ -53,7 +53,23 @@ def get_nearest_node(G : nx.Graph, nodo_attuale : int, nodi_da_visitare : list):
         lenght_list.append ((G[nodo_attuale][i]['weight'],i))
     
     return min(lenght_list, key=lambda x: x[0])
-   
+
+'''
+Dato il grafo G e 2 nodi calcola da quale noto passare facendo una deviazione 
+Ritorna il nodo da cui passare e il costo della deviazione (somma del costo dei 2 archi)
+'''
+def cheapest_deviation(G :nx.Graph, nodo_attuale : int, nodo_successivo : int, nodi_da_visitare : list):
+    lenght_list = []
+    for i in nodi_da_visitare:
+        #non vale dare deviazione da uno dei nodi della soluzione
+        if i == nodo_attuale or i == nodo_successivo:
+            continue
+
+        #calcolo il costo della deviazione
+        costo_deviazione = G[nodo_attuale][i]['weight'] + G[i][nodo_successivo]['weight']
+        lenght_list.append ((costo_deviazione,i))
+    
+    return min(lenght_list, key=lambda x: x[0])
 
 '''
 plot the solution with the solution edge in red

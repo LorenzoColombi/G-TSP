@@ -61,6 +61,7 @@ Ritorna il nodo da cui passare e il costo della deviazione (somma del costo dei 
 def cheapest_deviation(G :nx.Graph, nodo_attuale : int, nodo_successivo : int, nodi_da_visitare : list):
     lenght_list = []
     for i in nodi_da_visitare:
+        i = int(i)
         #non vale dare deviazione da uno dei nodi della soluzione
         if i == nodo_attuale or i == nodo_successivo:
             continue

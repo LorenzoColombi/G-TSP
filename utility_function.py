@@ -135,3 +135,24 @@ def costo(G : nx.Graph, soluzione : list, batteria_per_nodo : list) -> int:
 
     return int(costo_strada + costo_batteria) #approssimiamo all'intero più vicino
 
+
+'''
+Dato un grafo G, una soluzione e la batteria massima di un veicolo calcola la batteria rimanente per ogni nodo
+'''
+def calcolo_batteria_per_nodo(G : nx.Graph, tour : list, batteria_max : int):
+        batteria_per_nodo = [batteria_max]
+        for i in range(1,len(tour)):
+                #controllo se il nodo è di tipo cliente o colonnina
+                if(G.nodes[tour[i]]['type'] == "colonnina"):
+                        batteria_per_nodo.append(batteria_max)
+                else:
+                        batteria = batteria_per_nodo[i-1] - G[tour[i-1]][tour[i]]['weight']
+                        batteria_per_nodo.append(batteria)
+                               
+        return batteria_per_nodo
+
+def check_batteria_negativa(batteria_per_nodo : list):
+        for i in batteria_per_nodo:
+                if i < 0:
+                        return True
+        return False

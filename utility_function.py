@@ -156,3 +156,16 @@ def check_batteria_negativa(batteria_per_nodo : list):
                 if i < 0:
                         return True
         return False
+
+
+def get_farthest_node(G: nx.Graph, nodo_attuale: int, nodi_da_visitare: list):
+    lenght_list = []
+    for i in nodi_da_visitare:
+        i = int(i)  # altrimenti è una stringa
+        if i == nodo_attuale:
+            continue
+        #print(G[nodo_attuale][i]['weight'])
+        lenght_list.append((G[nodo_attuale][i]['weight'], i))
+    
+    return max(lenght_list, key=lambda x: x[0])
+

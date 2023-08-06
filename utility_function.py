@@ -83,7 +83,8 @@ def draw_solution(G : nx.Graph, soluzione : list, costo : int):
 
     #coloro tutti gli archi di nero
     for u,v in G.edges:
-        G[u][v]['color'] = "black"
+        #trasperenza
+        G[u][v]['color'] = "#00000033"
 
     #coloro gli archi della soluzione di rosso
     for i in range(len(soluzione)-1):
@@ -169,3 +170,24 @@ def get_farthest_node(G: nx.Graph, nodo_attuale: int, nodi_da_visitare: list):
     
     return max(lenght_list, key=lambda x: x[0])
 
+
+'''
+TODO
+'''
+def add_colonnine_to_tour(G : nx.Graph, tour : list, batteria_per_nodo : list, batteria_max : int):
+        #controllo che ci sia un valore di batteria per ogni nodo del tour
+        if(len(batteria_per_nodo) != len(tour)):
+                print("errore: lunghezza batteria per nodo diversa da lunghezza tour")
+                return None
+        #scorro la lista finché nessun tratto sia negativo
+        while(uf.check_batteria_negativa(batteria_per_nodo)):
+
+                for i in range(len(tour)-1,0,-1):
+                #for i in range(0,len(tour)):
+                        print("i: ", i)
+                        if(batteria_per_nodo[i] < 0):
+                                print("Sistemo un nodo")
+                                #devo aggiungere una colonnina prima di tour[i]
+                                tour, batteria_per_nodo = add_colonnina_before_i(G, tour, batteria_max, i)
+                                break
+        return tour, batteria_per_nodo

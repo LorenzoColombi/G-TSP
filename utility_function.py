@@ -88,6 +88,8 @@ def draw_solution(G : nx.Graph, soluzione : list, costo : int):
 
     #coloro gli archi della soluzione di rosso
     for i in range(len(soluzione)-1):
+        if soluzione[i] == soluzione[i+1]:
+                continue
         G[soluzione[i]][soluzione[i+1]]['color'] = "red"
 
     #aggiungiamo la soluzione all'immagine
@@ -126,6 +128,8 @@ def costo(G : nx.Graph, soluzione : list, batteria_per_nodo : list) -> int:
         #print("arco:",soluzione[i], soluzione[i+1], "costo:", G[soluzione[i]][soluzione[i+1]]['weight'])
 
         #costo strada
+        if soluzione[i] == soluzione[i+1]:
+              continue
         costo_strada += G[soluzione[i]][soluzione[i+1]]['weight']
 
         #se ho ricaricato la batteria
@@ -180,7 +184,7 @@ def add_colonnine_to_tour(G : nx.Graph, tour : list, batteria_per_nodo : list, b
                 print("errore: lunghezza batteria per nodo diversa da lunghezza tour")
                 return None
         #scorro la lista finché nessun tratto sia negativo
-        while(uf.check_batteria_negativa(batteria_per_nodo)):
+        while(check_batteria_negativa(batteria_per_nodo)):
 
                 for i in range(len(tour)-1,0,-1):
                 #for i in range(0,len(tour)):
@@ -191,3 +195,33 @@ def add_colonnine_to_tour(G : nx.Graph, tour : list, batteria_per_nodo : list, b
                                 tour, batteria_per_nodo = add_colonnina_before_i(G, tour, batteria_max, i)
                                 break
         return tour, batteria_per_nodo
+
+
+def add_colonnina_before_i(G : nx.graph, tour : list, batteria_max : int, i : int):
+        colonnine = [node for node in G.nodes if G.nodes[node]['type'] == "colonnina"]
+        best_inserzione = (int(1000000000),0)
+        for j in range(0,i): #i nodo batteria negativa
+                        
+                #prendo a due a due i nodi in tour 
+                nodo_attuale = tour[j]
+                nodo_successivo = tour[j+1]
+
+                temp_tour = tour.copy()
+
+                #trovo il nodo più vicino a nodo_attuale e nodo_successivo
+                inserzione = cheapest_deviation(G, nodo_attuale, nodo_successivo, colonnine)
+                #print("inserisco fra ", nodo_attuale, " e ", nodo_successivo, "colonnina:" , inserzione[1])
+                temp_tour.insert(j+1,inserzione[1])
+                batteria_per_nodo_temp = calcolo_batteria_per_nodo(G,temp_tour,batteria_max)
+                #coppia costo totale deviazione e nodo da cui passare
+
+                #print("temp tour; ", temp_tour)
+                #print("batteria per nodo temp: ", batteria_per_nodo_temp)
+                
+                if inserzione[0] < best_inserzione[0] and batteria_per_nodo_temp[i+1] > 0:
+                        #print("best inserzione trovata")
+                        best_inserzione = inserzione
+                        best_tour = temp_tour
+                        best_batteria_per_nodo = batteria_per_nodo_temp
+
+        return best_tour, best_batteria_per_nodo

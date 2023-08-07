@@ -150,6 +150,8 @@ def calcolo_batteria_per_nodo(G : nx.Graph, tour : list, batteria_max : int):
                 #controllo se il nodo è di tipo cliente o colonnina
                 if(G.nodes[tour[i]]['type'] == "colonnina"):
                         batteria_per_nodo.append(batteria_max)
+                elif tour[i] == tour [i-1]:
+                        batteria_per_nodo.append(batteria_per_nodo[i-1])                  
                 else:
                         batteria = batteria_per_nodo[i-1] - G[tour[i-1]][tour[i]]['weight']
                         batteria_per_nodo.append(batteria)

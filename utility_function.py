@@ -227,3 +227,30 @@ def add_colonnina_before_i(G : nx.graph, tour : list, batteria_max : int, i : in
                         best_batteria_per_nodo = batteria_per_nodo_temp
 
         return best_tour, best_batteria_per_nodo
+
+def draw_notext(G : nx.Graph, soluzione : list, costo : int):
+
+    colors_dict={"deposito":"blue", "cliente":"grey", "colonnina":"green"}
+
+    #coloro tutti gli archi di nero
+   
+    #coloro gli archi della soluzione di rosso
+    for i in range(len(soluzione)-1):
+        if soluzione[i] == soluzione[i+1]:
+                continue
+        G[soluzione[i]][soluzione[i+1]]['color'] = "red"
+
+    #aggiungiamo la soluzione all'immagine
+    fig, axe = plt.subplots(figsize=(12,7))
+    
+    pos = graphviz_layout(G, prog="dot")
+
+    #disegno del grafo
+    nx.draw(G,
+         with_labels=True, 
+         node_color=  [colors_dict[G.nodes[node]['type']] for node in G],
+         pos = nx.get_node_attributes(G, 'pos'), #così viene proporzionato in base alla distanza
+         edge_color = [G[u][v]['color'] for u,v in G.edges] #coloro gli archi
+         )
+    
+    plt.show()

@@ -123,7 +123,7 @@ def costo(G : nx.Graph, soluzione : list, batteria_per_nodo : list) -> int:
     #costo percorso stradale
     for i in range(len(soluzione)-1):
 
-        print("arco:",soluzione[i], soluzione[i+1], "costo:", G[soluzione[i]][soluzione[i+1]]['weight'])
+        #print("arco:",soluzione[i], soluzione[i+1], "costo:", G[soluzione[i]][soluzione[i+1]]['weight'])
 
         #costo strada
         costo_strada += G[soluzione[i]][soluzione[i+1]]['weight']
@@ -132,7 +132,7 @@ def costo(G : nx.Graph, soluzione : list, batteria_per_nodo : list) -> int:
         if batteria_per_nodo[i+1] > batteria_per_nodo[i]:
             #costo batteria
             costo_batteria += batteria_per_nodo[i+1] - batteria_per_nodo[i]
-            print("costo batteria:", batteria_per_nodo[i+1] - batteria_per_nodo[i])
+            #print("costo batteria:", batteria_per_nodo[i+1] - batteria_per_nodo[i])
 
     return int(costo_strada + costo_batteria) #approssimiamo all'intero più vicino
 
@@ -184,9 +184,9 @@ def add_colonnine_to_tour(G : nx.Graph, tour : list, batteria_per_nodo : list, b
 
                 for i in range(len(tour)-1,0,-1):
                 #for i in range(0,len(tour)):
-                        print("i: ", i)
+                        #print("i: ", i)
                         if(batteria_per_nodo[i] < 0):
-                                print("Sistemo un nodo")
+                                #print("Sistemo un nodo")
                                 #devo aggiungere una colonnina prima di tour[i]
                                 tour, batteria_per_nodo = add_colonnina_before_i(G, tour, batteria_max, i)
                                 break

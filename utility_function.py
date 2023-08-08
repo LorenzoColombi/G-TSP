@@ -254,3 +254,31 @@ def draw_notext(G : nx.Graph, soluzione : list, costo : int):
          )
     
     plt.show()
+    
+def generate_combination(soluzione,taglio):
+
+    #ordino i tagli
+    taglio = list(taglio)
+    taglio.sort()
+    '''
+    Data una soluzione e una lista di 3 tagli  genera tutte le possibili combinazioni in cui è possibile ricostruire il tour. Senza toccare il primo e l'ultimo segmento.
+    '''
+
+    #genero le 4 parti del tour
+    t1=soluzione[:taglio[0]]
+    t2=soluzione[taglio[0]:taglio[1]]
+    t3=soluzione[taglio[1]:taglio[2]]
+    t4=soluzione[taglio[2]:]
+
+    sol1 = t1 + t2[::-1] + t3 + t4
+    sol2 = t1 + t2 + t3[::-1] + t4
+    sol3 = t1 + t2[::-1] + t3[::-1] + t4
+
+    sol4 = t1 + t3 + t2 + t4
+    sol5 = t1 + t3[::-1] + t2 + t4
+    sol6 = t1 + t3 + t2[::-1] + t4
+    sol7 = t1 + t3[::-1] + t2[::-1] + t4
+
+    sol_list = [sol1, sol2, sol3, sol4, sol5, sol6, sol7]
+
+    return sol_list

@@ -282,3 +282,4 @@ def generate_combination(soluzione,taglio):
     sol_list = [sol1, sol2, sol3, sol4, sol5, sol6, sol7]
 
     return sol_list
+

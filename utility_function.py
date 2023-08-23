@@ -289,6 +289,6 @@ def compact_list(lista):
     '''
     lista_compatta = []
     for i in lista:
-        if i not in lista_compatta:
+        if i not in lista_compatta or i==0:
             lista_compatta.append(i)
     return lista_compatta

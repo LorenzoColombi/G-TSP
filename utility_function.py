@@ -177,9 +177,7 @@ def get_farthest_node(G: nx.Graph, nodo_attuale: int, nodi_da_visitare: list):
     return max(lenght_list, key=lambda x: x[0])
 
 
-'''
-TODO
-'''
+
 def add_colonnine_to_tour(G : nx.Graph, tour : list, batteria_per_nodo : list, batteria_max : int):
         #controllo che ci sia un valore di batteria per ogni nodo del tour
         if(len(batteria_per_nodo) != len(tour)):
@@ -260,7 +258,7 @@ def generate_combination(soluzione,taglio):
     Data una soluzione e una lista di 3 tagli  genera tutte le possibili combinazioni in cui è possibile ricostruire il tour. Senza toccare il primo e l'ultimo segmento.
     '''
 
-     #ordino i tagli
+    #ordino i tagli
     taglio = list(taglio)
     taglio.sort()
 
@@ -292,3 +290,62 @@ def compact_list(lista):
         if i not in lista_compatta or i==0:
             lista_compatta.append(i)
     return lista_compatta
+
+
+def differenza_batteria_per_nodo( bpn1 : list, bpn2 : list):
+        if len(bpn1) != len(bpn2):
+            print("errore: lunghezza batteria per nodo diversa")
+            return None
+      
+        diff = []
+        for i in range(len(bpn1)):
+                diff.append(bpn1[i] - bpn2[i])
+
+        #ritorno la somma delle differenze
+        return sum(diff)
+
+
+def add_colonnina_rapporto(G : nx.graph, tour : list,  batteria_per_nodo : list, batteria_max : int):
+        #provo tutte le colonnine che non sono nel tour
+        colonnine = [node for node in G.nodes if G.nodes[node]['type'] == "colonnina"]
+        #clienti = [node for node in G.nodes if G.nodes[node]['type'] == "cliente"]
+
+        best_ratio = 0
+        for j in range(0,len(tour)-1): #i nodo batteria negativa
+                #prendo a due a due i nodi in tour 
+                nodo_attuale = tour[j]
+                nodo_successivo = tour[j+1]
+
+                temp_tour = tour.copy()
+
+
+                #trovo il nodo più vicino a nodo_attuale e nodo_successivo
+                
+                costo_inserzione, colonnina = cheapest_deviation(G, nodo_attuale, nodo_successivo, colonnine)
+                guadagno_inserzione = batteria_max - G[colonnina][nodo_successivo]['weight'] - batteria_per_nodo[j+1] 
+              
+                ratio = guadagno_inserzione/costo_inserzione
+          
+                #aggiungo la colonnina a temp_tour
+                temp_tour.insert(j+1,colonnina)
+                
+                if ratio > best_ratio:
+                        #print("best inserzione trovata")
+                        best_ratio = ratio
+                        best_tour = temp_tour
+                        best_batteria_per_nodo = calcolo_batteria_per_nodo(G,best_tour,batteria_max)
+        
+        return best_tour, best_batteria_per_nodo
+
+
+def add_colonnine_to_tour_rapporto(G : nx.Graph, tour : list, batteria_per_nodo : list, batteria_max : int):
+    #controllo che ci sia un valore di batteria per ogni nodo del tour
+    if(len(batteria_per_nodo) != len(tour)):
+        print("errore: lunghezza batteria per nodo diversa da lunghezza tour")
+        return None
+
+    #finchè la soluzione non diventa ammissibile
+    while check_batteria_negativa(batteria_per_nodo) == True:
+        tour, batteria_per_nodo = add_colonnina_rapporto(G, tour, batteria_per_nodo, batteria_max)
+
+    return tour, batteria_per_nodo

@@ -369,3 +369,16 @@ def add_colonnine_to_tour_rapporto(G : nx.Graph, tour : list, batteria_per_nodo 
         tour, batteria_per_nodo = add_colonnina_rapporto(G, tour, batteria_per_nodo, batteria_max)
 
     return tour, batteria_per_nodo
+
+def two_2opt_swap(path, i, k):
+  
+    new_path = path[:i] + path[i:k+1][::-1] + path[k+1:]
+   
+    return new_path
+
+def penalizza_non_ammissibile(batteria_per_nodo : list, moltiplicatore : float):
+    penalizzazione = 0
+    for i in range(len(batteria_per_nodo)):
+        if batteria_per_nodo[i] < 0:
+            penalizzazione -= batteria_per_nodo[i] * moltiplicatore
+    return penalizzazione

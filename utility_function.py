@@ -196,6 +196,26 @@ def add_colonnine_to_tour(G : nx.Graph, tour : list, batteria_per_nodo : list, b
                                 break
         return tour, batteria_per_nodo
 
+def add_colonnine_to_tour_reverse(G : nx.Graph, tour : list, batteria_per_nodo : list, batteria_max : int):
+        #controllo che ci sia un valore di batteria per ogni nodo del tour
+        if(len(batteria_per_nodo) != len(tour)):
+                print("errore: lunghezza batteria per nodo diversa da lunghezza tour")
+                return None
+        #scorro la lista finché nessun tratto sia negativo
+        while(check_batteria_negativa(batteria_per_nodo) == True):
+              
+
+                for i in range(len(tour)):
+                #for i in range(0,len(tour)):
+                       
+                        if(batteria_per_nodo[i] < 0):
+                             
+                                #devo aggiungere una colonnina prima di tour[i]
+                                tour, batteria_per_nodo = add_colonnina_before_i(G, tour, batteria_max, i)
+                                
+                                break
+        return tour, batteria_per_nodo
+
 
 def add_colonnina_before_i(G : nx.graph, tour : list, batteria_max : int, i : int):
         colonnine = [node for node in G.nodes if G.nodes[node]['type'] == "colonnina"]

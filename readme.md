@@ -1,6 +1,7 @@
 # Green-TSP
 
 "Green Reverend enters a bar. TSP!"
+
 Ricordiamo che il TSP è un problema TOUR-ing completo :P
 
 ## Testo del problema
